@@ -1,0 +1,119 @@
+data:
+  test:
+    module: torch.utils.data
+    class: DataLoader
+    DataLoader:
+      dataset:
+        module: core.datasets.regiondataset
+        class: RegionDataset
+        RegionDataset:
+          dirnames:
+            - '''/extdata/ocr/phungpx/projects/PHUNGPX/semantic_segmentation_pytorch/dataset/NATCOM_REUP/CARD_FRONT_TYPE_2/test/CARD_FRONT_TYPE_2/'''
+            - '''/extdata/ocr/phungpx/projects/PHUNGPX/semantic_segmentation_pytorch/dataset/NATCOM_REUP/CARD_FRONT_TYPE_3/test/CARD_FRONT_TYPE_3/'''
+          classes:
+            BACKGROUND: [[0, 0, 0], 0, False, False]  # color, class_id, reduce_height, reduce_width
+            # HEADING: [[175, 153, 144], 1, True, False]
+            V_ID: [[48, 130, 245], 2, True, False]
+            V_FIRST_NAME: [[128, 128, 0], 3, True, False]
+            V_LAST_NAME: [[0, 101, 255], 4, True, False]
+            V_BD: [[100, 150, 255], 5, True, False]
+            V_BP: [[25, 225, 225], 6, True, False]
+            V_SEX: [[75, 180, 60], 7, True, False]
+            V_ISS_DATE: [[180, 215, 255], 8, True, False]
+            # FIGURE: [[0, 0, 255], 9, False, False]
+          image_size: (384, 384)
+          image_patterns: 
+            - '''.*g'''
+          mask_pattern: '''.json'''
+          is_textline: False
+          h_factor: [0.5, 0.5]
+          w_factor: [0, -0.02]
+          is_pad_to_square: False
+          ignore_field:
+      batch_size: 8
+      pin_memory: True
+      num_workers: 12
+      drop_last: False
+      shuffle: True
+
+  
+model:
+  module: core.models.fcn
+  class: FCN
+  FCN:
+    backbone: '''resnet50'''
+    backbone_fixed: False
+    pretrained_backbone: True
+    replace_stride_with_dilation: [True, True, True]
+    num_classes: 10
+
+metric:
+  module: core.handlers.evaluator
+  class: Metrics
+  Metrics:
+    metrics:
+      loss:
+        module: core.metric.loss
+        class: Loss
+        Loss:
+          loss_fn: 
+            module: core.loss.dice
+            class: MultiDice
+            MultiDice:
+              class_weight_alpha: 0.70
+              output_transform: 'lambda x: (x[0], x[1])'
+      pixel_accuracy:
+        module: core.metric.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''pixel_accuracy'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      mean_pixel_accuracy:
+        module: core.metric.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''mean_pixel_accuracy'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      mean_iou:
+        module: core.metric.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''mean_iou'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      frequence_weighted_IU:
+        module: core.metric.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''frequence_weighted_IU'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      # precision:
+      #   module: core.metric.segm_metric
+      #   class: SegmMetric
+      #   SegmMetric:
+      #     metric_name: '''precision'''
+      #     output_transform: 'lambda x: (x[0], x[1], x[2])'
+      # recall:
+      #   module: core.metric.segm_metric
+      #   class: SegmMetric
+      #   SegmMetric:
+      #     metric_name: '''recall'''
+      #     output_transform: 'lambda x: (x[0], x[1], x[2])'
+      # f1_score:
+      #   module: core.metric.segm_metric
+      #   class: SegmMetric
+      #   SegmMetric:
+      #     metric_name: '''f1_score'''
+      #     output_transform: 'lambda x: (x[0], x[1], x[2])'
+
+evaluator:
+  module: core.engine
+  class: Evaluator
+  Evaluator:
+    data: config['data']['test']
+    model: config['model']
+    metric: config['metric']
+
+extralibs:
+  torch: torch
+  logging: logging
+  transforms: torchvision.transforms

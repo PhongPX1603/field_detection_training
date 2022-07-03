@@ -1,0 +1,295 @@
+data:
+  train:
+    module: torch.utils.data
+    class: DataLoader
+    DataLoader:
+      dataset:
+        module: core.datasets.regiondataset
+        class: RegionDataset
+        RegionDataset:
+          dirnames: 
+            - '''/extdata/ocr/phungpx/projects/PHUNGPX/semantic_segmentation_pytorch/dataset/NATCOM_REUP/BLX/train/BLX/'''
+          classes:
+            BACKGROUND: [[0, 0, 0], 0, False, False]  # color, class_id, reduce_height, reduce_width
+            HEADING: [[175, 153, 144], 1, True, False]
+            V_DOSS: [[75, 25, 230], 2, True, False]
+            V_ID: [[48, 130, 245], 3, True, False]
+            V_NAME: [[128, 128, 0], 4, True, False]
+            V_AD: [[0, 101, 255], 5, True, False]
+            V_BD: [[100, 150, 255], 6, True, False]
+            V_SEX: [[25, 225, 225], 7, True, False]
+            V_PI: [[75, 180, 60], 8, True, False]
+            V_DE: [[180, 215, 255], 9, True, False]
+            FIGURE: [[0, 0, 255], 10, False, False]
+          image_size: (384, 384)
+          # transforms: '[
+          #         iaa.Add(value=(-100, 100), per_channel=True),
+          #         iaa.GaussianBlur(sigma=(0, 1)),
+          #         iaa.MotionBlur(),
+          #         iaa.Affine(rotate=(0, 360), shear=(-20, 20), fit_output=True),
+          #         iaa.PerspectiveTransform(scale=(0, 0.1)),
+          #         iaa.Crop(percent=(0, 0.1)),
+          #         iaa.Pad(percent=(0, 0.1)),
+          #         iaa.JpegCompression(compression=(0, 30)),
+          #         iaa.Rot90(k=[0, 1, 2, 3], keep_size=False),
+          #         iaa.Fliplr(p=0.5),
+          #         iaa.Flipud(p=0.5),
+          #         iaa.ChangeColorTemperature(),
+          #         iaa.Clouds(),
+          #         iaa.Dropout(),
+          #     ]'
+          transforms: '[
+                  iaa.Add(value=(-50, 50), per_channel=True),
+                  iaa.GaussianBlur(sigma=(0, 1)),
+                  iaa.MotionBlur(),
+                  iaa.Affine(rotate=(-10, 10), shear=(-10, 10), fit_output=True),
+                  iaa.PerspectiveTransform(scale=(0, 0.1)),
+                  iaa.ChangeColorTemperature(),
+                  iaa.Clouds(),
+                  iaa.Grayscale(alpha=[0.0, 1.0]),
+              ]'
+          # require_transforms: '[
+          #         iaa.Rot90(k=[0, 1, 3, 4], keep_size=False),
+          #     ]'
+          image_patterns: 
+            - '''**/*.*g'''
+          mask_pattern: '''**/*.json'''
+          is_textline: False
+          h_factor: [0.5, 0.5]
+          w_factor: [0, -0.02]
+          is_pad_to_square: False
+          ignore_field:  
+      batch_size: 4
+      pin_memory: True
+      num_workers: 12
+      drop_last: False
+      shuffle: True
+
+  train_eval:
+    module: torch.utils.data
+    class: DataLoader
+    DataLoader:
+      dataset:
+        module: core.datasets.regiondataset
+        class: RegionDataset
+        RegionDataset:
+          dirnames: 
+            - '''/extdata/ocr/phungpx/projects/PHUNGPX/semantic_segmentation_pytorch/dataset/NATCOM_REUP/BLX/train/BLX/'''
+          classes:
+            BACKGROUND: [[0, 0, 0], 0, False, False]  # color, class_id, reduce_height, reduce_width
+            HEADING: [[175, 153, 144], 1, True, False]
+            V_DOSS: [[75, 25, 230], 2, True, False]
+            V_ID: [[48, 130, 245], 3, True, False]
+            V_NAME: [[128, 128, 0], 4, True, False]
+            V_AD: [[0, 101, 255], 5, True, False]
+            V_BD: [[100, 150, 255], 6, True, False]
+            V_SEX: [[25, 225, 225], 7, True, False]
+            V_PI: [[75, 180, 60], 8, True, False]
+            V_DE: [[180, 215, 255], 9, True, False]
+            FIGURE: [[0, 0, 255], 10, False, False]
+          image_size: (384, 384)
+          image_patterns: 
+            - '''**/*.*g'''
+          mask_pattern: '''**/*.json'''
+          is_textline: False
+          h_factor: [0.5, 0.5]
+          w_factor: [0, -0.02]
+          is_pad_to_square: False
+          ignore_field:  
+      batch_size: 4
+      pin_memory: True
+      num_workers: 12
+      drop_last: False
+      shuffle: True
+
+  valid:
+    module: torch.utils.data
+    class: DataLoader
+    DataLoader:
+      dataset:
+        module: core.datasets.regiondataset
+        class: RegionDataset
+        RegionDataset:
+          dirnames: 
+            - '''/extdata/ocr/phungpx/projects/PHUNGPX/semantic_segmentation_pytorch/dataset/NATCOM_REUP/BLX/valid/BLX/'''
+          classes:
+            BACKGROUND: [[0, 0, 0], 0, False, False]  # color, class_id, reduce_height, reduce_width
+            HEADING: [[175, 153, 144], 1, True, False]
+            V_DOSS: [[75, 25, 230], 2, True, False]
+            V_ID: [[48, 130, 245], 3, True, False]
+            V_NAME: [[128, 128, 0], 4, True, False]
+            V_AD: [[0, 101, 255], 5, True, False]
+            V_BD: [[100, 150, 255], 6, True, False]
+            V_SEX: [[25, 225, 225], 7, True, False]
+            V_PI: [[75, 180, 60], 8, True, False]
+            V_DE: [[180, 215, 255], 9, True, False]
+            FIGURE: [[0, 0, 255], 10, False, False]
+          image_size: (384, 384)
+          image_patterns: 
+            - '''**/*.*g'''
+          mask_pattern: '''**/*.json'''
+          is_textline: False
+          h_factor: [0.5, 0.5]
+          w_factor: [0, -0.02]
+          is_pad_to_square: False
+          ignore_field:
+      batch_size: 8
+      pin_memory: True
+      num_workers: 12
+      drop_last: False
+      shuffle: True
+
+loss:
+  module: core.loss.dice
+  class: MultiDice
+  MultiDice:
+    class_weight_alpha: 0.70
+    output_transform: 'lambda x: (x[0], x[1])'
+  
+model:
+  module: core.models.fcn
+  class: FCN
+  FCN:
+    backbone: '''resnet50'''
+    backbone_fixed: False
+    pretrained_backbone: True
+    replace_stride_with_dilation: [True, True, True]
+    num_classes: 11
+
+optim:
+  module: torch.optim
+  class: Adam
+  Adam:
+    params: config['model'].parameters()
+    lr: 0.00001
+    amsgrad: True
+
+early_stopping:
+  module: core.handler.early_stopping
+  class: EarlyStopping
+  EarlyStopping:
+    evaluator_name: '''valid'''
+    patience: 50
+    delta: 0
+    mode: '''min'''
+    score_name: '''loss'''
+
+writer:
+  module: core.handler.writer
+  class: Writer
+  Writer:
+    save_dir: '''checkpoint/field_detection/NATCOM/BLX/'''
+
+logger:
+  module: core.handler.logger
+  class: Logger
+  Logger:
+    save_dir: '''checkpoint/field_detection/NATCOM/BLX/'''
+    mode: logging.DEBUG
+    format: '''%(asctime)s - %(name)s - %(levelname)s - %(message)s'''
+
+plot:
+  module: core.handler.plot
+  class: Plot
+  Plot:
+    save_dir: '''checkpoint/field_detection/NATCOM/BLX/'''
+
+lr_scheduler:
+  module: torch.optim.lr_scheduler
+  class: ReduceLROnPlateau
+  ReduceLROnPlateau:
+    optimizer: config['optim']
+    mode: '''min'''
+    factor: 0.1
+    patience: 10
+    verbose: True
+
+model_inspection:
+  module: core.handlers.model_inspection
+  class: ModelInspection
+  ModelInspection:
+    verbose: True
+    input_shape: '(384, 384, 3)'
+
+metric:
+  module: core.metric.segm_metric
+  class: Metrics
+  Metrics:
+    metrics:
+      loss:
+        module: core.metric.loss
+        class: Loss
+        Loss:
+          loss_fn: 
+            module: loss.field_detection.dice
+            class: MultiDice
+            MultiDice:
+              class_weight_alpha: 0.70
+              output_transform: 'lambda x: (x[0], x[1])'
+      pixel_accuracy:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''pixel_accuracy'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      mean_pixel_accuracy:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''mean_pixel_accuracy'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      mean_iou:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''mean_iou'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      frequence_weighted_IU:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''frequence_weighted_IU'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      precision:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''precision'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      recall:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''recall'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+      f1_score:
+        module: core.metric.field_detection.segm_metric
+        class: SegmMetric
+        SegmMetric:
+          metric_name: '''f1_score'''
+          output_transform: 'lambda x: (x[0], x[1], x[2])'
+
+trainer:
+  module: trainer.trainer
+  class: Trainer
+  Trainer:
+    project_name: '''BLX'''
+    model: config['model']
+    data: config['data']
+    loss: config['loss']
+    optim: config['optim']
+    metric: config['metric']
+    early_stopping: config['early_stopping']
+    lr_scheduler: config['lr_scheduler']
+    logger: config['logger']
+    writer: config['writer']
+    plot: config['plot']
+    model_inspection: config['model_inspection']
+    save_dir: '''checkpoint/field_detection/NATCOM/BLX/'''
+
+extralibs:
+  torch: torch
+  iaa: imgaug.augmenters
+  logging: logging
+  torchvision: torchvision
+  transforms: torchvision.transforms

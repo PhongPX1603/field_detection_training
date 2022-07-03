@@ -2,6 +2,7 @@ from typing import Callable
 from ..handlers.evaluator import MetricBase
 
 
+
 class Loss(MetricBase):
     def __init__(self, loss_fn, output_transform: Callable = lambda x: x):
         super(Loss, self).__init__(output_transform)
